@@ -35,5 +35,13 @@ module.exports = {
     }],
     "no-unused-expressions": "off",
     "function-paren-newline": "off",
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.test.js","*.spec.js"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
 };
