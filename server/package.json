@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "./node_modules/nodemon/bin/nodemon.js src/app.js --exec 'npm run lint && node'",
+    "lint": "eslint \"**/*.js\"",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,22 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "nodemailer": "^6.3.1"
+    "nodemailer": "^6.3.1",
+    "@hapi/hapi": "^18.3.2",
+    "@hapi/hoek": "^8.2.2",
+    "@hapi/joi": "^15.1.1",
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.5.5",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.2",
+    "sequelize": "^5.18.4",
+    "sqlite3": "^4.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "jest": "^24.9.0"
   }
 }
