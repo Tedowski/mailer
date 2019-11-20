@@ -20,12 +20,12 @@ class App extends Component {
                 body: '',
             },
             inbox: {},
-            sent: {},
+            sent: [],
         };
     }
 
     componentDidMount () {
-        Promise.all([this.getInbox()])
+        Promise.all([this.getSent()])
             .then(() => {
                 this.setState({
                     loading: false,
@@ -63,15 +63,15 @@ class App extends Component {
         });
 
         try {
-            const inbox = (await MailService.getSent()).data;
+            const sentMails = (await MailService.getSent()).data;
 
             this.setState({
-                message: inbox.message,
+                sent: sentMails,
             });
 
-            const { message } = this.state;
+            const { sent } = this.state;
 
-            console.log(message);
+            console.log(sent);
         } catch (err) {
             this.setState({
                 error: err.message,

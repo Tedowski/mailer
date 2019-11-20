@@ -72,12 +72,11 @@ export default class MailPage extends Component {
     }
 
     render () {
-        const { message } = this.props;
         const { error, response, to, subject, text } = this.state;
 
         return (
             <div className="wrapper">
-                <div>{response || error || message}</div>
+                <div>{response || error}</div>
                 <div className="form">
                     <div className="input-group">
                         <label htmlFor="addressee">Email to</label>
