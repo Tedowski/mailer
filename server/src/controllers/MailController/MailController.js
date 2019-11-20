@@ -1,18 +1,16 @@
 const transporter = require('./transporter');
 
+const { Sent } = require('../../models');
+
 module.exports = {
     async sendMail (req, res) {
         try {
             const options = req.body;
 
-            // eslint-disable-next-line no-unused-vars
-            await transporter.sendMail(options, (error, data) => {
-                if (error) {
-                    // eslint-disable-next-line no-console
-                    console.log('Error occurs');
-                } else {
-                    // eslint-disable-next-line no-console
-                    console.log('Email sent');
+            await transporter.sendMail(options, async (error) => {
+                if (!error) {
+                    await Sent.create(options);
+
                     res.status(200).json({
                         message: 'Email sent',
                     });
@@ -40,12 +38,12 @@ module.exports = {
     },
     async getSent (req, res) {
         try {
-            res.status(200).json({
-                message: 'sent mails retrieved',
-            });
-
             // TODO *********
 
+            const sentMails = await Sent.findAll({
+                limit: 20,
+            });
+            res.send(sentMails);
             // get sent emails of authenticated user
             // store in database ?
         } catch (err) {
