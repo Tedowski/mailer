@@ -1,72 +1,93 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Switch, Route, NavLink } from 'react-router-dom';
 import './App.css';
 
-import MailService from "./services/MailService";
+import MailPage from './containers/MailPage';
+
+import MailService from './services/MailService';
 
 class App extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
-            message: "Hello world",
+            message: 'Hello world',
             loading: true,
-            error: null
-        }
+            error: null,
+            user: {},
+            email: {
+                subject: '',
+                to: '',
+                body: '',
+            },
+            inbox: {},
+            sent: {},
+        };
     }
 
-    async getInbox() {
+    componentDidMount () {
+        Promise.all([this.getInbox()])
+            .then(() => {
+                this.setState({
+                    loading: false,
+                });
+            });
+    }
+
+    async getInbox () {
         this.setState({
             error: null,
-            loading: true
+            loading: true,
         });
 
         try {
             const inbox = (await MailService.getInbox()).data;
 
             this.setState({
-                message: inbox.message
+                message: inbox.message,
             });
 
-            console.log(this.state.message);
+            const { message } = this.state;
+
+            console.log(message);
         } catch (err) {
             this.setState({
-                error: err.message
+                error: err.message,
             });
         }
     }
 
-    componentDidMount() {
-        Promise.all([this.getInbox()])
-            .then(() => {
-                this.setState({
-                    loading: false
-                });
+    async getSent () {
+        this.setState({
+            error: null,
+            loading: true,
+        });
+
+        try {
+            const inbox = (await MailService.getSent()).data;
+
+            this.setState({
+                message: inbox.message,
             });
+
+            const { message } = this.state;
+
+            console.log(message);
+        } catch (err) {
+            this.setState({
+                error: err.message,
+            });
+        }
     }
 
-    render() {
-
-        const { message, error } = this.state;
+    render () {
+        const { message } = this.state;
 
         return (
             <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <p>
-                        { message }
-                    </p>
-                    <p>
-                        { error && <div>{error}</div> }
-                    </p>
-                    <a
-                        className="App-link"
-                        href="https://reactjs.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Learn React
-                    </a>
-                </header>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                <Route exact path="/">
+                    <MailPage message={message} />
+                </Route>
             </div>
         );
     }

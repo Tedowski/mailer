@@ -1,16 +1,24 @@
-// const nodemailer = require('nodemailer');
+const transporter = require('./transporter');
 
 module.exports = {
     async sendMail (req, res) {
         try {
-            res.status(200).json({
-                message: 'mail sent',
+            const options = req.body;
+
+            // eslint-disable-next-line no-unused-vars
+            await transporter.sendMail(options, (error, data) => {
+                if (error) {
+                    // eslint-disable-next-line no-console
+                    console.log('Error occurs');
+                } else {
+                    // eslint-disable-next-line no-console
+                    console.log('Email sent');
+                    res.status(200).json({
+                        message: 'Email sent',
+                    });
+                }
             });
 
-            // TODO **********
-
-            // create mail object
-            // send email
             // if success -> store in database
         } catch (err) {
             res.status(500).json(err);

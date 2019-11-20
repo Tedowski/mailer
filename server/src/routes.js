@@ -1,4 +1,4 @@
-const MailController = require('./controllers/MailController');
+const MailController = require('./controllers/MailController/MailController');
 
 module.exports = (app) => {
     app.get('/inbox',

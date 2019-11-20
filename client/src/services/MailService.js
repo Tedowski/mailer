@@ -1,13 +1,13 @@
-import api from './api'
+import api from './api';
 
 export default {
     getInbox () {
-        return api.get('/inbox')
+        return api.get('/inbox');
     },
     getSent () {
-        return api.get('/sent')
+        return api.get('/sent');
     },
-    sendMail () {
-        return api.post('/send')
-    }
-}
+    sendMail (data) {
+        return api.post('/send', data);
+    },
+};
