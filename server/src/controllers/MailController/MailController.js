@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const transporter = require('./transporter');
 
 const { Sent } = require('../../models');
@@ -5,33 +6,39 @@ const { Sent } = require('../../models');
 module.exports = {
     async sendMail (req, res) {
         try {
-            const options = req.body;
+            const {
+                token, receiver, subject, text,
+            } = req.body;
+
+            const options = {
+                from: 'tadeas.elective@gmail.com',
+                to: receiver,
+                subject,
+                text,
+            };
 
             await transporter.sendMail(options, async (error) => {
                 if (!error) {
-                    await Sent.create(options);
+                    // get user id from access token
+                    const tokenDecoded = jwt.decode(token, { complete: true });
+                    const userId = tokenDecoded.payload.id;
+                    // create sent object with user's id
+                    const sent = {
+                        receiver: options.to,
+                        subject: options.subject,
+                        text: options.text,
+                        user_id: userId,
+                    };
+                    await Sent.create(sent);
 
                     res.status(200).json({
-                        message: 'Email sent',
+                        message: 'Message sent successfully',
+                        receiver: options.to,
+                        timestamp: Date.now(),
+                        status: 200,
                     });
                 }
             });
-
-            // if success -> store in database
-        } catch (err) {
-            res.status(500).json(err);
-        }
-    },
-    async getInbox (req, res) {
-        try {
-            res.status(200).json({
-                message: 'inbox retrieved',
-            });
-
-            // TODO *********
-
-            // get inbox of authenticated user
-            // store in database ?
         } catch (err) {
             res.status(500).json(err);
         }
@@ -40,12 +47,14 @@ module.exports = {
         try {
             // TODO *********
 
+            // get sent emails of authenticated user
             const sentMails = await Sent.findAll({
+                where: {
+                    user_id: 1,
+                },
                 limit: 20,
             });
             res.send(sentMails);
-            // get sent emails of authenticated user
-            // store in database ?
         } catch (err) {
             res.status(500).json(err);
         }

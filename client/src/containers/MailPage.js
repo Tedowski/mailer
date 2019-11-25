@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import MailService from "../services/MailService";
+import { Redirect } from 'react-router-dom';
+
+import MailService from '../services/MailService';
 
 
 export default class MailPage extends Component {
@@ -16,8 +18,18 @@ export default class MailPage extends Component {
         };
     }
 
+    componentDidUpdate () {
+        const { loading } = this.state
+        if (loading) {
+            this.setState({
+                loading: false,
+            });
+        }
+    }
+
     async sendMail () {
-        const { from, to, subject, text } = this.state;
+        const { to, subject, text } = this.state;
+        const { token } = this.props;
         if (to === '' || subject === '' || text === '') {
             this.setState({
                 error: 'Missing fields',
@@ -27,21 +39,20 @@ export default class MailPage extends Component {
 
         this.setState({
             error: null,
-            loading: true,
             response: null,
         });
 
         try {
-            const mail = {
-                from,
-                to,
+            const mailPayload = {
+                receiver: to,
                 subject,
                 text,
+                token,
             };
-            const response = (await MailService.sendMail(mail)).data;
+            const response = (await MailService.sendMail(mailPayload)).data;
 
+            console.log(response);
             this.setState({
-                response: response.message,
                 to: '',
                 subject: '',
                 text: '',
@@ -72,7 +83,12 @@ export default class MailPage extends Component {
     }
 
     render () {
-        const { error, response, to, subject, text } = this.state;
+        const { error, response, to, subject, text, loading } = this.state;
+        const { token } = this.props;
+
+        if (!token && !loading) {
+            return <Redirect to="/login" />;
+        }
 
         return (
             <div className="wrapper">

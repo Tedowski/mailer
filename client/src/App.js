@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Switch, Route, NavLink } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import './App.css';
 
 import MailPage from './containers/MailPage';
-
-import MailService from './services/MailService';
+import RegisterPage from './containers/RegisterPage';
+import SentPage from './containers/SentPage';
 
 class App extends Component {
     constructor (props) {
@@ -13,80 +13,46 @@ class App extends Component {
             message: 'Hello world',
             loading: true,
             error: null,
-            user: {},
-            email: {
-                subject: '',
-                to: '',
-                body: '',
-            },
-            inbox: {},
-            sent: [],
+            token: null,
         };
     }
 
+    // TODO ******************
+    // reset access token when it expires
+    // keep token only in app state
+    // check for expiration on update
+
     componentDidMount () {
-        Promise.all([this.getSent()])
-            .then(() => {
-                this.setState({
-                    loading: false,
-                });
-            });
-    }
+        const mailerToken = localStorage.getItem('mailerToken');
 
-    async getInbox () {
-        this.setState({
-            error: null,
-            loading: true,
-        });
-
-        try {
-            const inbox = (await MailService.getInbox()).data;
-
+        if (mailerToken) {
             this.setState({
-                message: inbox.message,
-            });
-
-            const { message } = this.state;
-
-            console.log(message);
-        } catch (err) {
-            this.setState({
-                error: err.message,
-            });
-        }
-    }
-
-    async getSent () {
-        this.setState({
-            error: null,
-            loading: true,
-        });
-
-        try {
-            const sentMails = (await MailService.getSent()).data;
-
-            this.setState({
-                sent: sentMails,
-            });
-
-            const { sent } = this.state;
-
-            console.log(sent);
-        } catch (err) {
-            this.setState({
-                error: err.message,
+                token: mailerToken,
             });
         }
     }
 
     render () {
-        const { message } = this.state;
+        const { message, token } = this.state;
 
         return (
             <div className="App">
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Route exact path="/">
-                    <MailPage message={message} />
+                <Route
+                    exact path="/" render={() => {
+                        if (token === null) {
+                            return <Redirect to="/register" />;
+                        }
+                        return <MailPage />;
+                    }}
+                />
+                <Route exact path="/register">
+                    <RegisterPage message={message} />
+                </Route>
+                <Route exact path="/send">
+                    <MailPage token={token} />
+                </Route>
+                <Route exact path="/sent">
+                    <SentPage token={token} />
                 </Route>
             </div>
         );
