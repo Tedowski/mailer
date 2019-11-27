@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import FormItem from '../components/FormItem';
+import Button from '../components/Button';
+
 import AuthService from '../services/AuthService';
 
 
@@ -12,12 +15,10 @@ export default class RegisterPage extends Component {
             password: null,
             passConf: null,
             error: null,
-            loading: true,
-            isToken: false,
         };
     }
 
-    async handleSubmit () {
+    handleSubmit = async () => {
         const { username, password, passConf } = this.state;
         // Check if password and confPass match (throw err)
         if (password !== passConf) {
@@ -38,10 +39,8 @@ export default class RegisterPage extends Component {
             const response = (await AuthService.register(user)).data;
 
             const { token } = response;
-            localStorage.setItem('mailerToken', token);
-            this.setState({
-                isToken: true,
-            });
+            sessionStorage.setItem('mailerToken', token);
+            this.props.tokenize(token);
         } catch (err) {
             this.setState({
                 error: err.message,
@@ -49,50 +48,45 @@ export default class RegisterPage extends Component {
         }
     }
 
-    handleUsername (evt) {
+    handleUsername = (evt) => {
         this.setState({
             username: evt.target.value,
         });
-    }
+    };
 
-    handlePassword (evt) {
+    handlePassword = (evt) => {
         this.setState({
             password: evt.target.value,
         });
-    }
+    };
 
-    handleConfirm (evt) {
+    handleConfirm = (evt) => {
         this.setState({
             passConf: evt.target.value,
         });
-    }
+    };
 
     render () {
-        const { error, isToken } = this.state;
+        const { error } = this.state;
+        const { token } = this.props;
 
-        if (isToken) {
+        if (token) {
             return <Redirect to="/send" />;
         }
 
         return (
-            <div className="wrapper">
-                <div>{error}</div>
-                <div className="form">
-                    <div className="input-group">
-                        <label htmlFor="username">Gmail username</label>
-                        <input type="username" id="username" onChange={(evt) => this.handleUsername(evt)} />
+            <section className="section">
+                <div className="container">
+                    <h1>Register</h1>
+                    <div className="form form-m shadow">
+                        <div>{error}</div>
+                        <FormItem name="username" label="Username" type="text" method={this.handleUsername} />
+                        <FormItem name="password" label="Password" type="password" method={this.handlePassword} />
+                        <FormItem name="passConf" label="Confirm password" type="password" method={this.handleConfirm} />
+                        <Button styling="btn-main" name="Register" method={this.handleSubmit} />
                     </div>
-                    <div className="input-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" id="password" onChange={(evt) => this.handlePassword(evt)} />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="passConf">Re-type Password</label>
-                        <input type="password" id="passConf" onChange={(evt) => this.handleConfirm(evt)} />
-                    </div>
-                    <button onClick={() => this.handleSubmit()}>Send Mail</button>
                 </div>
-            </div>
+            </section>
         );
     }
 }

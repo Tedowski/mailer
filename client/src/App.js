@@ -5,15 +5,19 @@ import './App.css';
 import MailPage from './containers/MailPage';
 import RegisterPage from './containers/RegisterPage';
 import SentPage from './containers/SentPage';
+import LoginPage from './containers/LoginPage';
+import LogoutPage from './containers/LogoutPage';
+
+import Header from './components/Header';
 
 class App extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            message: 'Hello world',
             loading: true,
             error: null,
             token: null,
+            isUpdated: false,
         };
     }
 
@@ -23,7 +27,11 @@ class App extends Component {
     // check for expiration on update
 
     componentDidMount () {
-        const mailerToken = localStorage.getItem('mailerToken');
+        const mailerToken = sessionStorage.getItem('mailerToken');
+
+        this.setState({
+            isUpdated: true,
+        });
 
         if (mailerToken) {
             this.setState({
@@ -32,27 +40,43 @@ class App extends Component {
         }
     }
 
+    saveToken = (token) => {
+        this.setState({
+            token,
+        });
+    };
+
+    removeToken = () => {
+        this.setState({
+            token: null,
+        })
+    };
+
     render () {
-        const { message, token } = this.state;
+        const { token } = this.state;
 
         return (
             <div className="App">
+                <Header token={token} />
                 <Route
                     exact path="/" render={() => {
-                        if (token === null) {
-                            return <Redirect to="/register" />;
-                        }
-                        return <MailPage />;
+                        return <Redirect to="/login" />
                     }}
                 />
                 <Route exact path="/register">
-                    <RegisterPage message={message} />
+                    <RegisterPage token={token} tokenize={this.saveToken} />
+                </Route>
+                <Route exact path="/login">
+                    <LoginPage token={token} tokenize={this.saveToken} />
                 </Route>
                 <Route exact path="/send">
                     <MailPage token={token} />
                 </Route>
                 <Route exact path="/sent">
                     <SentPage token={token} />
+                </Route>
+                <Route exact path="/logout">
+                    <LogoutPage logout={this.removeToken} />
                 </Route>
             </div>
         );

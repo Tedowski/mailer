@@ -1,10 +1,10 @@
 import api from './api';
 
 export default {
-    getSent () {
-        return api.get('/sent');
+    getSent (token) {
+        return api.get(`/sent?token=${token}`);
     },
-    sendMail (data) {
-        return api.post('/send', data);
+    sendMail (data, token) {
+        return api.post(`/send?token=${token}`, data);
     },
 };

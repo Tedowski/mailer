@@ -10,7 +10,7 @@ module.exports = (app) => {
         AuthController.login,
     );
     app.get('/sent',
-        // MailControllerPolicy.authorize,
+        MailControllerPolicy.authorize,
         MailController.getSent,
     );
     app.post('/send',

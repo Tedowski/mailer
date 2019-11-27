@@ -1,22 +1,127 @@
-.App {
-  text-align: center;
+/* CONTAINERS ************************************* */
+
+section {
+  padding-top: 72px;
+  position: relative;
 }
 
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #09d3ac;
+/* LINKS ************************************* */
+
+a {
+  text-decoration: none;
+  color: currentColor;
+  transition: all .3s ease;
+}
+
+a:hover {
+  color: #405DE6;
+}
+
+.link {
+  display: inline-block;
+  padding: 4px 12px;
+}
+
+/* HEADER ************************************* */
+
+.header .container {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  line-height: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  background-color: #fff;
+}
+
+/* MODIFIERS ************************************* */
+
+.shadow {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* FORM ************************************* */
+
+.form {
+  padding: 48px;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.form .btn {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.form-m {
+  width: 480px;
+}
+
+.form-l {
+  width: 580px;
+}
+
+/* INPUT ************************************* */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 18px;
+  vertical-align: center;
+  border: 2px solid #405DE6;
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+/* BUTTONS ************************************* */
+
+button {
+  border: none;
+}
+
+.btn {
+  display: block;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 2px solid;
+  cursor: pointer;
+}
+
+.btn-main {
+  background-color: #405DE6;
+  color: #fff;
+  font-size: 14px;
+  line-height: 18px;
+  transition: all .3s ease;
+}
+
+.btn-main:hover {
+  background-color: #2f4da7;
 }

@@ -3,9 +3,7 @@ const { User } = require('../../models');
 const config = require('../../config/config');
 
 function jwtSignUser (user) {
-    return jwt.sign(user, config.authentication.jwtSecret, {
-        expiresIn: '30m',
-    });
+    return jwt.sign(user, config.authentication.jwtSecret);
 }
 
 module.exports = {
@@ -25,10 +23,10 @@ module.exports = {
     },
     async login (req, res) {
         try {
-            const { email, password } = req.body;
+            const { username, password } = req.body;
             const user = await User.findOne({
                 where: {
-                    email,
+                    username,
                 },
             });
             if (!user) {

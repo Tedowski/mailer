@@ -7,8 +7,9 @@ module.exports = {
     async sendMail (req, res) {
         try {
             const {
-                token, receiver, subject, text,
+                receiver, subject, text,
             } = req.body;
+            const { token } = req.query;
 
             const options = {
                 from: 'tadeas.elective@gmail.com',
@@ -45,12 +46,15 @@ module.exports = {
     },
     async getSent (req, res) {
         try {
-            // TODO *********
+            const { token } = req.query;
+
+            const tokenDecoded = jwt.decode(token, { complete: true });
+            const userId = tokenDecoded.payload.id;
 
             // get sent emails of authenticated user
             const sentMails = await Sent.findAll({
                 where: {
-                    user_id: 1,
+                    user_id: userId,
                 },
                 limit: 20,
             });
