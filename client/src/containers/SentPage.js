@@ -51,13 +51,15 @@ export default class MailPage extends Component {
                 <div className="container">
                     <h1>Sent mails</h1>
                     <div>{ error }</div>
-                    {sent.length ? (
-                        sent.map((mail, index) => (
-                            <MailItem mail={mail} key={index} />
-                        ))
-                    ) : (
-                        <div>No mails to be displayed</div>
-                    )}
+                    <div className="list">
+                        {sent.length ? (
+                            sent.map((mail, index) => (
+                                <MailItem mail={mail} key={index} />
+                            ))
+                        ) : (
+                            <div>No mails to be displayed</div>
+                        )}
+                    </div>
                 </div>
             </section>
         );
