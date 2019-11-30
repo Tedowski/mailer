@@ -1,4 +1,4 @@
-##Mailer app
+## Mailer app
 
 This project has two parts
 
@@ -6,7 +6,7 @@ This project has two parts
 
 2. React front-end client-side app
 
-###Set-up
+### Set-up
 
 In both sub-directories, run:
 
