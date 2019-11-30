@@ -17,4 +17,4 @@ In ``server/`` directory, run:
 ``cp .env.example .env``
 
 Either put in your valid e-mail account (with according mail service),
-or keep the existing (tadeas.elective
+or keep the existing (tadeas.elective)
