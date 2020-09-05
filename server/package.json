@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^18.3.2",
-    "@hapi/hoek": "^8.2.2",
+    "@hapi/hoek": "^9.0.4",
     "@hapi/joi": "^15.1.1",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.5",
